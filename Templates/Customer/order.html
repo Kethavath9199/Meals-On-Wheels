@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
+
+
+{#    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>#}
+    <script>
+        // Initialize Firebase
+        const config = {
+            apiKey: "AIzaSyC6MLEYIZxv7DHhs-vtmCB3rLkd1y2r3bI",
+            authDomain: "mealsonwheelsiit.firebaseapp.com",
+            databaseURL: "https://mealsonwheelsiit.firebaseio.com",
+            projectId: "mealsonwheelsiit",
+            storageBucket: "mealsonwheelsiit.appspot.com",
+            messagingSenderId: "755544742392"
+        };
+        firebase.initializeApp(config) ;
+
+
+        const database = firebase.database() ;
+        const not_delivered =  database.ref('Transactions/notDelivered') ;
+        not_delivered.on('value', function (snapshot) {
+            var obj = snapshot.val() ;
+            var flag = false;
+          for(var transaction in obj){
+                if(!obj.hasOwnProperty(transaction)) continue;
+                if(transaction===document.getElementById('uid').innerText) {
+                    document.getElementById('delivererlocation').innerText = obj[transaction].delivererLocation;
+                    document.getElementById('status').innerText = obj[transaction].status;
+                    document.getElementById('customerLocation').innerText = obj[transaction].customerLocation;
+                    flag=true;
+                }
+
+
+            }
+            if(flag===false)
+                {
+                    alert("Order Delivered");
+                    location.href="/";
+                }
+          GetMap();
+          GetMapdisplay();
+        })
+    </script>
+     <script type='text/javascript'>
+        function GetMapdisplay() {
+            var map = new Microsoft.Maps.Map('#myMapdisplay', {
+                credentials:'ArQm8xOmwjqUgQPxLjEhNC4IYi1IC_1xmg3qhqPygrszIk-RLEB6wfir6-7m1kBO'
+            });
+
+            var deliverer = new Microsoft.Maps.Location.parseLatLong(document.getElementById('delivererlocation').innerText);
+            var customer=new Microsoft.Maps.Location.parseLatLong(document.getElementById('customerLocation').innerText);
+            //Add a green pushpin that has dragging enabled and events attached to it.
+            var bluePin = new Microsoft.Maps.Pushpin(deliverer, { color: '#00f', draggable: false });
+            map.entities.push(bluePin);
+            var redPin = new Microsoft.Maps.Pushpin(customer, { color: '#ff0000', draggable: false });
+            map.entities.push(redPin);
+            map.setView({
+            zoom: 12
+            });
+        }
+    </script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMapdisplay' defer></script>
+    <script type='text/javascript'>
+        var map;
+        var directionsManager;
+        function GetMap()
+        {
+            map = new Microsoft.Maps.Map('#myMap', {});
+            //Load the directions module.
+            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                //Create an instance of the directions manager.
+                directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                directionsManager.setRequestOptions({
+                    routeMode: Microsoft.Maps.Directions.RouteMode.driving
+                });
+                //Create waypoints to route between.
+                var loc1 = new Microsoft.Maps.Location.parseLatLong(document.getElementById('delivererlocation').innerText);
+                var loc2 = new Microsoft.Maps.Location.parseLatLong(document.getElementById('customerLocation').innerText);
+                var seattleWaypoint = new Microsoft.Maps.Directions.Waypoint({address: 'Deliverer' ,location:loc1});
+                var bluePin = new Microsoft.Maps.Pushpin(loc1, { color: '#00f', draggable: true });
+                map.entities.push(bluePin);
+                directionsManager.addWaypoint(seattleWaypoint);
+                var workWaypoint = new Microsoft.Maps.Directions.Waypoint({ address:'Customer',location:loc2 });
+                directionsManager.addWaypoint(workWaypoint);
+                //Add event handlers to directions manager.
+                Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError', directionsError);
+                Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', directionsUpdated);
+                //Calculate directions.
+                directionsManager.calculateDirections();
+            });
+        }
+        function directionsUpdated(e) {
+            //Get the current route index.
+            var routeIdx = directionsManager.getRequestOptions().routeIndex;
+            //Get the distance of the route, rounded to 2 decimal places.
+            var distance = Math.round(e.routeSummary[routeIdx].distance * 100)/100;
+            //Get the distance units used to calculate the route.
+            var units = directionsManager.getRequestOptions().distanceUnit;
+            var distanceUnits = '';
+            if (units == Microsoft.Maps.Directions.DistanceUnit.km) {
+                distanceUnits = 'km'
+            } else {
+                //Must be in miles
+                distanceUnits = 'miles'
+            }
+            //Time is in seconds, convert to minutes and round off.
+            var time = Math.round(e.routeSummary[routeIdx].timeWithTraffic / 60);
+            document.getElementById('routeInfoPanel').innerHTML = 'Distance: ' + distance + ' ' + distanceUnits + '<br/>Time with Traffic: ' + time + ' minutes';
+        }
+        function directionsError(e) {
+            alert('Error: ' + e.message + '\r\nResponse Code: ' + e.responseCode)
+        }
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=ArQm8xOmwjqUgQPxLjEhNC4IYi1IC_1xmg3qhqPygrszIk-RLEB6wfir6-7m1kBO' defer></script>
+</head>
+<body >
+    <div hidden id="myMap" style="position:relative;width:800px;height:600px;"></div>
+    <div  id="myMapdisplay" style="position:relative;width:800px;height:600px;"></div>
+    <span hidden id="uid">{{ uid }}</span>
+    <span hidden id="customerLocation"></span>
+    Restaurant Name : {{ order.vendorName }}<br>
+    Date: {{ order.date }}<br>
+    Deliverer : {{ order.delivererName }}<br>
+    Order Summary:<br>
+    {% for i,j in order.itemsOrdered.items %}
+        {{ i }}<br>
+        {% for k,l in j.items %}
+
+            {{ k }}:{{ l }}
+
+        {% endfor %}
+    <br><br>
+    {% endfor %}
+    Payment Mode : {{ order.paymentMode }}<br>
+    Total : {{ order.totalAmount }}<br>
+    Status : <span id="status">{{ order.status }}</span><br>
+    Estimated Delivery: <br>
+    <div id='routeInfoPanel'></div>
+    <span id="test"></span>
+    <span hidden id="delivererlocation"  ></span><br>
+</body>
+</html>

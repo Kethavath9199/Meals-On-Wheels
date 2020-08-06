@@ -1,0 +1,64 @@
+{% extends 'Customer/CusBase.html' %}
+{% load static %}
+
+{% block content %}
+<header id="gtco-header" class="gtco-cover-xs gtco-cover" style="background-image: url({% static 'images/img_bg_1.jpg' %})" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+
+				<div class="col-md-12 col-md-offset-0 text-center">
+					<div class="row row1">
+
+						<h2 class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+                        {% if user.is_authenticated %}
+                            <h1 class="cursive-font">Update Profile</h1><br>
+                          <h2><span class="intro-text-small" style="font-weight: bold">Hello, <a href={% url 'Customer:profile' %} target="_blank">{{ user.first_name }} {{ user.last_name }}</a>
+                          <br>Email : {{ user.email }}<br></span>
+                            <br></h2>
+
+                        {% else %}
+                            #if customer is not logged in, give login button
+                          <a class="lead" href="{% url 'Authentication:login' %}"><input type="button" class="btn btn-primary btn-block" value="Login!"></a>
+	                    {% endif %}
+
+
+						</div>
+
+
+
+				</div>
+			</div>
+		</div>
+	</header>
+<br><br>
+<div class="col-md-8 col-md-offset-4 text-center gtco-heading">
+<div class="text-center center-block">
+        <div class="gtco-container text-justify">
+			<div class="register">
+				 <div class="register-top-grid">
+
+					  <form method="post">
+					    {% csrf_token %}
+                            {% for field in form %}
+                              <p>
+                                <span class="text-capitalize">{{ field.label_tag }}</span><br>
+                                {{ field }}
+                                {% if field.help_text %}
+                                  <small style="font-style: italic"> <span class="text-danger">{{ field.help_text }}</span></small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                  <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                              </p>
+                            {% endfor %}
+
+                        <input type="submit" class="btn btn-outline" value="Update">
+					  </form>
+					 </div>
+                 </div>
+				 </div>
+</div>
+</div>
+
+    <br><br>
+{% endblock %}

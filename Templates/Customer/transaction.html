@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Forwarding</title>
+</head>
+<body>
+    Please do not reload this page!<br>
+    <form method="post" name="transaction_form" action="https://securegw-stage.paytm.in/theia/processTransaction">
+        {% csrf_token %}
+        {% for key,value in context.items %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endfor %}
+        <input type="hidden" name="CALLBACK_URL" value="https://mealsonwheels.pythonanywhere.com/customer/post_transaction">
+        <input type="hidden" name="CHECKSUMHASH" value="{{ CHECKSUMHASH }}">
+    </form>
+
+    <script>
+        document.transaction_form.submit() ;
+    </script>
+</body>
+</html>

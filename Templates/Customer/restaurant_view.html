@@ -1,0 +1,122 @@
+{% extends 'Customer/CusBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+}
+</style>
+
+
+        <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% static 'images/img_bg_1.jpg' %})" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-center">
+					<div class="row row-mt-15em">
+						<div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+                        {% if user.is_authenticated %}
+
+                          <span class="intro-text-small">Hello, <a href={% url 'Customer:profile' %} target="_blank">{{ user.first_name }} {{ user.last_name }}</a></span>
+                        {% else %}
+
+                          <a class="lead" href="{% url 'Authentication:login' %}"><input type="button" class="btn btn-primary btn-block" value="Login!"></a>
+	                    {% endif %}
+{#							<span class="intro-text-small">Desire meets <a href="http://gettemplates.co" target="_blank">new Food</a></span>#}
+				 			<h1 class="cursive-font">{{ restname }}</h1>
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</header>
+
+
+
+<div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+<div class="text-center center-block">
+        <div class="gtco-container text-justify">
+			<div class="register">
+				 <div class="register-top-grid">
+                     <form method="POST" action="{% url 'Customer:cart' %}">
+                            {% csrf_token %}
+                       <input type="hidden" value="{{ uid }}" name="restaurant" >{#{{ i }}#}
+<br><br>
+
+                         <h2><span class="popular-text" style="font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;">MENU</span></h2>
+
+                    {% for s,t in menu.items %}
+                         <hr>
+
+                        <h3><span style="color: #f0ad4e;">{{ s }}:</span></h3>
+                        <br><br>
+
+                        {% for i,j in t.items %}
+                            <p>
+                            {{ i }} &ensp;
+
+                            <input type="number" value="0" min="0" name="{{ i }}">{#{{ i }}#} &ensp;
+
+
+
+
+                            {% if j.isSpicy == 'Yes' %}<i class="icon"><img src="{% static 'images/chili-pepper.png' %}">{% endif %}
+
+                            <span style="float: right">
+                                {% if j.mark == 'Veg' %}
+                                <i class="icon"><img src="{% static 'images/icon-veg.png' %}">
+                            {% else %}
+                                <i class="icon"><img src="{% static 'images/icon-non-veg.png' %}">
+                            {% endif %}
+
+                            </span>
+                            <br>
+                            <i class="icon"><img src="{% static 'images/mixing.png' %}"><span class="text-info">&ensp; {{ j.ingredients }}</span></i>
+                            <h3 class="cursive-font" align="right" style="">₹ {{ j.price }}</h3>
+                            </p>
+
+
+                            <br>
+
+
+
+                            <br>
+
+                        {% endfor %}
+                    {% endfor %}
+
+                     <input type="submit" class="btn btn-outline" value="Add To Cart" name="cart"> &ensp;
+                     <h2><span class="icon" style="display: inline"><i class="icon-shopping-cart"></i></span></h2>
+                     </form>
+<br><br>
+                    <h2><span class="popular-text" style="font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;">Reviews</span></h2>
+                    {% for i,j in reviews.items %}
+                            <br><p>
+                        {% for k,l in j.items %}
+                             {{ l }} Stars
+                            <br>
+                            {{ k }}
+                        <br>
+                        {% endfor %}
+                        <br>
+                        </p><br>
+                    {% endfor %}
+
+                 </div>
+            </div>
+        </div>
+</div>
+</div>
+
+{% endblock %}

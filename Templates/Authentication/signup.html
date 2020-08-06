@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Aesthetic by gettemplates.co
+	Twitter: http://twitter.com/gettemplateco
+	URL: http://gettemplates.co
+-->
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>MealsOnWheels &mdash; Love your Hunger</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Food deliver website" />
+	<meta name="keywords" content="food deliver website" />
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+	<!-- Themify Icons-->
+	<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="{% static 'xss/magnific-popup.css' %}">
+
+	<!-- Bootstrap DateTimePicker -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
+
+	<!-- Owl Carousel  -->
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+	<!-- Modernizr JS -->
+	<script src="{% static 'js/modernizr-2.6.2.min.js' %}"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="{% static 'js/respond.min.js' %}"></script>
+	<![endif]-->
+
+	</head>
+	<body>
+
+	<div class="gtco-loader"></div>
+
+	<div id="page">
+
+
+	<!-- <div class="page-inner"> -->
+	<nav class="gtco-nav" role="navigation">
+		<div class="gtco-container">
+
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<div id="gtco-logo">
+					<span class="icon">
+							<i class="ti-truck"></i>
+					</span><a href="index.html">Meals On Wheels<em>.</em></a></div>
+				</div>
+			</div>
+
+		</div>
+	</nav>
+    <header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image: url({% static 'images/img_bg_1.jpg' %})" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-left">
+
+
+					<div class="row row-pb-md">
+						<div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                              {% if user.is_authenticated %}
+                          <h2><span class="intro-text-small" style="font-weight: bold">Hello, <a href={% url 'Customer:profile' %} target="_blank">{{ user.first_name }} {{ user.last_name }}</a>
+                          <br>Email : {{ user.email }}<br></span>
+                            <br></h2>
+
+                        {% else %}
+                            #if customer is not logged in, give login button
+                          <a class="lead" href="{% url 'Authentication:login' %}"><input type="button" class="btn btn-primary btn-block" value="Login!"></a>
+	                    {% endif %}
+							<span class="intro-text-small">New <a href="" target="_blank">User?</a></span>
+							<h1 class="cursive-font">Sign up below!</h1>
+
+                            <br>
+
+                                    <div class="intro-text-small col-md-12 col-md-offset-10 text-right">username has been taken as your eamil-id</div>
+
+						</div>
+
+						<div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+
+						</div>
+					</div>
+
+
+				</div>
+
+			</div>
+		</div>
+	</header>
+
+<div class="col-md-12 col-md-offset-2">
+    <br><br>
+        <div class="container">
+			<div class="register">
+				 <div class="register-top-grid">
+					  <form method="post">
+					    {% csrf_token %}
+					    {% for field in form %}
+					      <p>
+					        {{ field.label_tag }}<br>
+					        {{ field }}
+					        {% if field.help_text %}
+					          <small style="color: grey">{{ field.help_text }}</small>
+					        {% endif %}
+					        {% for error in field.errors %}
+					          <p style="color: red">{{ error }}</p>
+					        {% endfor %}
+					      </p>
+					    {% endfor %}
+					    <input type="submit" class="btn-group-sm btn btn-outline btn-primary" value="Sign up!">
+					  </form>
+					 </div>
+					 </div>
+				 </div>
+<br><br>
+</div>
+
+
+
+<footer id="gtco-footer" role="contentinfo" style="background-image: url({% static 'images/img_bg_1.jpg' %})" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row row-pb-md">
+
+
+
+
+				<div class="col-md-12 text-center">
+					<div class="gtco-widget">
+						<h3>Get In Touch</h3>
+						<ul class="gtco-quick-contact">
+							<li><a href="#"><i class="icon-phone"></i> +1 234 567 890</a></li>
+							<li><a href="#"><i class="icon-mail2"></i> mealsonwheelsiitg@gmail.com</a></li>
+							<li><a href="#"><i class="icon-chat"></i> Live Chat</a></li>
+						</ul>
+					</div>
+					<div class="gtco-widget">
+						<h3>Get Social</h3>
+						<ul class="gtco-social-icons">
+							<li><a href="#"><i class="icon-twitter"></i></a></li>
+							<li><a href="#"><i class="icon-facebook"></i></a></li>
+							<li><a href="#"><i class="icon-linkedin"></i></a></li>
+							<li><a href="#"><i class="icon-dribbble"></i></a></li>
+						</ul>
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+		</div>
+	</footer>
+	<!-- </div> -->
+
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
+	</div>
+
+	<!-- jQuery -->
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<!-- jQuery Easing -->
+	<script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+	<!-- Bootstrap -->
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<!-- Waypoints -->
+	<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+	<!-- Carousel -->
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	<!-- countTo -->
+	<script src="{% static 'js/jquery.countTo.js' %}"></script>
+
+	<!-- Stellar Parallax -->
+	<script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+
+	<!-- Magnific Popup -->
+	<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static 'js/magnific-popup-options.js' %}"></script>
+
+	<script src="{% static 'js/moment.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+
+
+	<!-- Main -->
+	<script src="{% static 'js/main.js' %}"></script>
+
+	</body>
+</html>

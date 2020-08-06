@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <br>
+    {% for i,j in trans.items %}
+        Order date: {{ j.date }}<br>
+        Restaurant: {{ j.vendorname }}<br>
+        Items Ordered:<br>
+        {% for p,q in j.itemsOrdered.items %}
+            {{ p }}<br>
+            Quantity: {{ q.quantity }}<br>
+            Price: {{ q.price }}<br>
+        {% endfor %}
+        Payment Mode: {{ j.paymentMode }}<br>
+        Total Amount: {{ j.totalAmount }}<br>
+         <form method="post">
+        {% csrf_token %}
+            <input type="hidden" value="{{ j.vendor }}" name="vendor">
+             <input type="hidden" value="{{ j.customer }}" name="customer">
+             <input type="hidden" value="{{ j.id }}" name="id">
+            <input type="text" onfocus="this.value=''" value="{{ j.review }}" name="review">
+            <input type="number" onfocus="this.value=''" min="0" max="5" value="{{ j.rating }}" name="rating">
+            <button type="submit">Submit</button>
+        </form>
+        <br>
+    {% endfor %}
+</body>
+</html>

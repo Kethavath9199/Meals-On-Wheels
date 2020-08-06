@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Current Orders</title>
+</head>
+<body>
+    Current Orders!<br><br>
+    {% for order in curr_transactions_list %}
+        {% for name,value in order.items %}
+            {% if name == 'date' or name == 'paymentMode' or name == 'transactionId' %}
+                {{ name }} -- {{ value }}
+                <br>
+            {% endif %}
+        {% endfor %}
+        <br>
+        Order Details:
+        <table style="border: 2px solid teal">
+            <tr><th>Item Name</th><th>Item Price</th><th>Item Quantity</th></tr>
+            {% for name,value in order.items %}
+                {% if name == 'itemsOrdered' %}
+                    {% for item_name,item_details in value.items %}
+                        <tr><td>{{ item_name }}</td>
+                        {% for detail,detail_value in item_details.items %}
+                            <td>{{ detail_value }}</td>
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            <tr><td colspan="2"><b>Total</b></td><td><b>{{ order.totalAmount }}</b></td></tr>
+        </table>
+    {% endfor %}
+</body>
+</html>

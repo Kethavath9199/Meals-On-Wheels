@@ -1,0 +1,56 @@
+{% extends 'Vendor/vendorBase.html' %}
+{% load static %}
+
+{% block content %}
+    <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url({% static 'images/img_bg_1.jpg' %})" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-center">
+					<div class="row row-mt-15em">
+						<div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+                        {% if user.is_authenticated %}
+
+                          <span class="intro-text-small">Hello there!</span>
+                            {# Hello, <a href={% url 'Customer:profile' %} target="_blank">{{ user.first_name }} {{ user.last_name }}</a> #}
+                        {% else %}
+                            #if customer is not logged in, give login button
+                          <a class="lead" href="{% url 'Authentication:login' %}"><input type="button" class="btn btn-primary btn-block" value="Login!"></a>
+	                    {% endif %}
+{#							<span class="intro-text-small">Desire meets <a href="http://gettemplates.co" target="_blank">new Food</a></span>#}
+				 			<h1 class="cursive-font">Taste all our delicacies!</h1>
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</header>
+    <form method="post" action="{% url 'Vendor:post_edit_details' %}">
+        {% csrf_token %}
+        {% for detail,detail_value in vendor_details.items %}
+            {% if detail == 'avgPrice' or detail == 'type' %}
+                {{ detail }} --
+                <label>
+                    <input type="text" name="{{ detail }}" value="{{ detail_value }}">
+                </label> <br>
+            {% elif detail == 'closingTime' or detail == 'openingTime' %}
+                {{ detail }} --
+                <label>
+                    <input type="time" name="{{ detail }}" value="{{ detail_value }}">
+                </label><br>
+            {% elif detail == 'phone' %}
+                {{ detail }} --
+                <label>
+                    <input type="tel" name="{{ detail }}" value="{{ detail_value }}" pattern="[1-9]{1}[0-9]{9}">
+                </label><br>
+            {% else %}
+                {{ detail }} -- {{ detail_value }}<br>
+            {% endif %}
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+    {# TODO: Validation in javascript #}
+{% endblock %}
